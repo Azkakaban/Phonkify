@@ -1,0 +1,41 @@
+name: phonkify
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  supabase_flutter: ^2.17.2
+  just_audio: ^0.10.6
+  file_picker: ^12.3.0
+
+  audio_service:
+    path: packages/audio_service
+
+  app_links: ^7.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icons/phonkify_icon.png
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icons/phonkify_icon.png"
+  min_sdk_android: 21
