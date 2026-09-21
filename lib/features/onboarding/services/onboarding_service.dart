@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../music/models/song.dart';
+import '../../../music/models/song.dart';
 
 class OnboardingService {
   OnboardingService._();
