@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../music/models/song.dart';
-import '../../../recommendation/services/recommendation_cache_service.dart';
-import '../../../recommendation/services/recommendation_service.dart';
+import '../../music/models/song.dart';
+import '../../recommendation/services/recommendation_cache_service.dart';
+import '../../recommendation/services/recommendation_service.dart';
 import '../services/onboarding_service.dart';
 
 class OnboardingPage extends StatefulWidget {
