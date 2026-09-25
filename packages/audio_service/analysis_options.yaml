@@ -2,3 +2,5 @@ analyzer:
   exclude:
     - example/**
     - test/**
+    - build/**
+    - android/**
