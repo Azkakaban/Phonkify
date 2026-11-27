@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'google_logo.dart';
+
 import '../services/auth_service.dart';
 import 'register_page.dart';
 
@@ -92,7 +94,21 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Future<void> _googleLogin() async {
+    setState(() => _isLoading = true);
+    try {
+      await _authService.signInWithGoogle();
+    } on AuthException catch (e) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+    } catch (e) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Google login gagal: $e')));
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
   void _openRegisterPage() {
+
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) =>
@@ -248,6 +264,23 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 const SizedBox(height: 20),
+
+
+                const SizedBox(height: 16),
+                OutlinedButton(
+                  onPressed: _isLoading ? null : _googleLogin,
+                  style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(52)),
+                  child: Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
+                    GoogleLogo(size: 24), SizedBox(width: 12), Text('Continue with Google'),
+                  ]),
+                ),
+                const SizedBox(height: 20),
+                const Row(children: [
+                  Expanded(child: Divider()),
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text('OR')),
+                  Expanded(child: Divider()),
+                ]),
+                const SizedBox(height: 12),
 
                 Row(
                   mainAxisAlignment:
