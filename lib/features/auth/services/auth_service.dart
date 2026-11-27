@@ -54,6 +54,48 @@ class AuthService {
     return response;
   }
 
+  /// Login/registrasi melalui Google OAuth.
+  Future<bool> signInWithGoogle() async {
+    return _supabase.auth.signInWithOAuth(
+      OAuthProvider.google,
+      redirectTo: emailRedirectUrl,
+    );
+  }
+
+  /// Memastikan profil Google user tersedia di tabel profiles.
+  /// Username dibuat permanen dan unik dengan suffix UID.
+  Future<void> ensureGoogleProfile() async {
+    final user = _supabase.auth.currentUser;
+    if (user == null) return;
+
+    final existing = await _supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', user.id)
+        .maybeSingle();
+    if (existing != null) return;
+
+    final metadata = user.userMetadata ?? {};
+    final displayName = (metadata['full_name'] ?? metadata['name'] ??
+            user.email?.split('@').first ?? 'Google User')
+        .toString()
+        .trim();
+    final rawUsername = displayName.toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
+        .replaceAll(RegExp(r'^_+|_+$'), '');
+    final base = rawUsername.isEmpty ? 'user' : rawUsername;
+    final suffix = user.id.replaceAll('-', '').substring(0, 6).toLowerCase();
+    final username = '${base}_$suffix';
+    final avatarUrl = (metadata['avatar_url'] ?? metadata['picture'])?.toString();
+
+    await _supabase.from('profiles').insert({
+      'id': user.id,
+      'username': username,
+      'display_name': displayName,
+      'avatar_url': avatarUrl,
+    });
+  }
+
   /// Logout user.
   Future<void> logout() async {
     await _supabase.auth.signOut();
